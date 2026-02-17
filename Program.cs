@@ -1,4 +1,4 @@
-﻿using AdsTransparency;
+using AdsTransparency;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,4 +16,4 @@ builder.Services
 
 WebApplication app = builder.Build();
 app.MapMcp();
-app.Run();
+await app.RunAsync();

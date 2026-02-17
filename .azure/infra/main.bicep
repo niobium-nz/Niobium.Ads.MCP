@@ -19,9 +19,6 @@ param containerImage string
 @description('ScrapeCreators API key passed to the container as SCRAPECREATORS_API_KEY.')
 param scrapecreatorsApiKey string
 
-@description('Custom domain name to bind to the Container App (host name). Leave empty to skip binding.')
-param customDomain string = ''
-
 @description('The external ingress target port for the container.')
 param ingressTargetPort int = 80
 
@@ -56,7 +53,6 @@ module containerApp './modules/container-app.bicep' = {
     containerImage: containerImage
     ingressTargetPort: ingressTargetPort
     scrapecreatorsApiKey: scrapecreatorsApiKey
-    customDomain: customDomain
   }
 }
 
