@@ -16,4 +16,4 @@ builder.Services
 
 WebApplication app = builder.Build();
 app.MapMcp();
-await app.RunAsync();
+app.Run();
