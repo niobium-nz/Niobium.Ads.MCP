@@ -10,8 +10,6 @@ builder.Services
     .AddTransient<IMetaAdsLibrary, ScrapecreatorsMetaAdsLibrary>()
     .AddMcpServer()
     .WithHttpTransport()
-    .WithToolsFromAssembly()
-    .WithStdioServerTransport()
     .WithToolsFromAssembly();
 
 WebApplication app = builder.Build();
