@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
+    env:
+      VERSION_MAJOR: "1"
+      VERSION_MINOR: "0"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,6 +40,7 @@ jobs:
           images: docker.io/5he11/adslibrary
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ env.VERSION_MAJOR }}.${{ env.VERSION_MINOR }}.${{ github.run_number }}
             type=sha
 
       - name: Build Docker image
@@ -76,7 +81,7 @@ jobs:
               --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
               --template-file ".azure/infra/main.bicep" \
               --parameters \
-                containerImage="docker.io/5he11/adslibrary:sha-${{ github.sha }}" \
+                containerImage="docker.io/5he11/adslibrary:${{ env.VERSION_MAJOR }}.${{ env.VERSION_MINOR }}.${{ github.run_number }}" \
                 scrapecreatorsApiKey="${{ secrets.SCRAPECREATORS_API_KEY }}" \
                 containerAppName="${{ vars.CONTAINER_APP_NAME }}" \
                 containerAppsEnvironmentName="${{ vars.CONTAINER_APPS_ENVIRONMENT_NAME }}"
