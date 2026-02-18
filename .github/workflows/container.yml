@@ -82,9 +82,9 @@ jobs:
               --template-file ".azure/infra/main.bicep" \
               --parameters \
                 containerImage="docker.io/5he11/adslibrary:${{ env.VERSION_MAJOR }}.${{ env.VERSION_MINOR }}.${{ github.run_number }}" \
-                envVars='{ \
-                  "SCRAPECREATORS_API_KEY": "${{ secrets.SCRAPECREATORS_API_KEY }}", \
-                  "X_API_KEY": "${{ secrets.X_API_KEY }}" \
-                }' \
+                envVars='[ \
+                  {"name": "SCRAPECREATORS_API_KEY", "value": "${{ secrets.SCRAPECREATORS_API_KEY }}"},
+                  {"name": "X_API_KEY", "value": "${{ secrets.X_API_KEY }}"} \
+                ]' \
                 containerAppName="${{ vars.CONTAINER_APP_NAME }}" \
                 containerAppsEnvironmentName="${{ vars.CONTAINER_APPS_ENVIRONMENT_NAME }}"

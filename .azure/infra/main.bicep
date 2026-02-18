@@ -22,23 +22,12 @@ param scrapecreatorsApiKey string
 @description('The external ingress target port for the container.')
 param ingressTargetPort int = 8080
 
-@description('Environment variables for the container app in JSON format.')
-param envVars string
+@description('Environment variables for the container app (array of {name, value} objects).')
+param envVars array = []
 
 var logAnalyticsName = '${appName}-law'
 var environmentName = containerAppsEnvironmentName
 var containerAppResourceName = containerAppName
-
-// Parse the JSON string into an object
-var envVarsObj = jsonStringToObject(envVars)
-
-// Define the environment variables array
-var envVarArray = envVarsObj 
-  ? [for key, value in envVars: {
-      name: key
-      value: value
-    }] 
-  : []
 
 module logAnalytics './modules/log-analytics.bicep' = {
   name: 'logAnalytics'
@@ -67,7 +56,7 @@ module containerApp './modules/container-app.bicep' = {
     containerImage: containerImage
     ingressTargetPort: ingressTargetPort
     scrapecreatorsApiKey: scrapecreatorsApiKey
-    containerAppEnv: envVarArray
+    containerAppEnv: envVars
   }
 }
 
