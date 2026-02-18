@@ -13,9 +13,19 @@ param containerImage string
 @description('The external ingress target port for the container.')
 param ingressTargetPort int = 8080
 
-@secure()
-@description('ScrapeCreators API key passed to the container as SCRAPECREATORS_API_KEY.')
-param scrapecreatorsApiKey string
+@description('Environment variables for the container app (array of {name, value} objects).')
+param containerAppEnv array = []
+
+// Derive secret names from env var names (lowercase, replace _ with -)
+var derivedSecrets = [for ev in containerAppEnv: {
+  name: toLower(replace(ev.name, '_', '-'))
+  value: ev.value
+}]
+
+var containerEnv = [for ev in containerAppEnv: {
+  name: ev.name
+  secretRef: toLower(replace(ev.name, '_', '-'))
+}]
 
 resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
   name: name
@@ -32,24 +42,14 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
         targetPort: ingressTargetPort
         transport: 'auto'
       }
-      secrets: [
-        {
-          name: 'scrapecreators-api-key'
-          value: scrapecreatorsApiKey
-        }
-      ]
+      secrets: derivedSecrets
     }
     template: {
       containers: [
         {
           name: 'app'
           image: containerImage
-          env: [
-            {
-              name: 'SCRAPECREATORS_API_KEY'
-              secretRef: 'scrapecreators-api-key'
-            }
-          ]
+          env: containerEnv
           resources: {
             cpu: any('0.25')
             memory: '0.5Gi'

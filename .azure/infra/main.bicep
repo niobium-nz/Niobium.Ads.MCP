@@ -15,10 +15,6 @@ param containerAppName string = '${appName}-ca'
 @description('Container image to deploy to Azure Container Apps (e.g., docker.io/5he11/adslibrary:sha-<commit>).')
 param containerImage string
 
-@secure()
-@description('ScrapeCreators API key passed to the container as SCRAPECREATORS_API_KEY.')
-param scrapecreatorsApiKey string
-
 @description('The external ingress target port for the container.')
 param ingressTargetPort int = 8080
 
@@ -55,7 +51,6 @@ module containerApp './modules/container-app.bicep' = {
     managedEnvironmentId: managedEnvironment.outputs.id
     containerImage: containerImage
     ingressTargetPort: ingressTargetPort
-    scrapecreatorsApiKey: scrapecreatorsApiKey
     containerAppEnv: envVars
   }
 }
