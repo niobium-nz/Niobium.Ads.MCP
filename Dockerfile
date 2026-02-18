@@ -26,4 +26,6 @@ RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app
 FROM base AS final
 WORKDIR /app
 COPY --link --from=build /app .
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["./Niobium.Ads.MCP"]
