@@ -9,11 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="dog-hair-removal.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include=".azure\infra\main.bicep" />
     <None Include=".azure\infra\modules\container-app.bicep" />
     <None Include=".azure\infra\modules\log-analytics.bicep" />
     <None Include=".azure\infra\modules\managed-environment.bicep" />
     <None Include=".github\workflows\container.yml" />
+    <EmbeddedResource Include="dog-hair-removal.json" />
   </ItemGroup>
 
   <ItemGroup>
