@@ -1,4 +1,4 @@
-﻿namespace AdsTransparency
+namespace Niobium.Ads.MCP
 {
     public class MetaAdSnapshotBody
     {

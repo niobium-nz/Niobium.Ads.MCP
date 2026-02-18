@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace AdsTransparency
+namespace Niobium.Ads.MCP
 {
     public class MetaAdsSearchResponse
     {

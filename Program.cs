@@ -1,6 +1,4 @@
-using AdsTransparency;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Niobium.Ads.MCP;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -13,5 +11,6 @@ builder.Services
     .WithToolsFromAssembly();
 
 WebApplication app = builder.Build();
+app.UseMiddleware<ApiKeyMiddleware>();
 app.MapMcp();
 app.Run();

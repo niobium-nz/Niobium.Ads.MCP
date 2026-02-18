@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace AdsTransparency
+namespace Niobium.Ads.MCP
 {
     internal class ScrapecreatorsMetaAdsLibrary(HttpClient httpClient) : IMetaAdsLibrary
     {

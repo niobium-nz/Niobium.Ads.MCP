@@ -1,7 +1,7 @@
-﻿using ModelContextProtocol.Server;
+using ModelContextProtocol.Server;
 using System.ComponentModel;
 
-namespace AdsTransparency
+namespace Niobium.Ads.MCP
 {
     [McpServerToolType]
     public class AdsLibraryTool(IMetaAdsLibrary adsLibrary)
