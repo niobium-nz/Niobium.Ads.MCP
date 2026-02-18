@@ -20,7 +20,7 @@ param containerImage string
 param scrapecreatorsApiKey string
 
 @description('The external ingress target port for the container.')
-param ingressTargetPort int = 80
+param ingressTargetPort int = 8080
 
 var logAnalyticsName = '${appName}-law'
 var environmentName = containerAppsEnvironmentName

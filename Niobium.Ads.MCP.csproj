@@ -13,7 +13,7 @@
     <None Include=".azure\infra\modules\container-app.bicep" />
     <None Include=".azure\infra\modules\log-analytics.bicep" />
     <None Include=".azure\infra\modules\managed-environment.bicep" />
-    <None Include=".github\workflows\docker.yml" />
+    <None Include=".github\workflows\container.yml" />
   </ItemGroup>
 
   <ItemGroup>

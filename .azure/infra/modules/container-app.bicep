@@ -11,7 +11,7 @@ param managedEnvironmentId string
 param containerImage string
 
 @description('The external ingress target port for the container.')
-param ingressTargetPort int = 443
+param ingressTargetPort int = 8080
 
 @secure()
 @description('ScrapeCreators API key passed to the container as SCRAPECREATORS_API_KEY.')
