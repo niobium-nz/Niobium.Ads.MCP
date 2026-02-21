@@ -19,7 +19,7 @@ RUN dotnet restore -a $TARGETARCH
 
 # Copy source code and publish app
 COPY --link . .
-RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app
+RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app Niobium.Ads.MCP/Niobium.Ads.MCP.csproj
 
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
