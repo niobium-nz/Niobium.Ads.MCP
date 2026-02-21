@@ -13,8 +13,7 @@ ARG TARGETARCH
 WORKDIR /src
 
 # Copy the solution file and any NuGet config
-COPY --link *.sln ./
-COPY --link NuGet.config ./
+COPY --link *.slnx ./
 
 # Copy all .csproj files to the root of the workdir
 COPY ./*/*.csproj ./
@@ -23,11 +22,14 @@ COPY ./*/*.csproj ./
 RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv $file ${file%.*}/; done
 
 # Restore as distinct layers
-RUN dotnet restore -a $TARGETARCH *.sln
+RUN dotnet restore -a $TARGETARCH *.slnx
 
-# Copy source code and publish app
+# Copy source code
 COPY --link . .
-RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app Niobium.Ads.MCP/*.csproj
+
+# Publish the application
+WORKDIR "/src/Niobium.Ads.MCP" 
+RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
