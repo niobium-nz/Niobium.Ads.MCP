@@ -12,15 +12,22 @@ ARG BUILD_CONFIGURATION=Release
 ARG TARGETARCH
 WORKDIR /src
 
+# Copy the solution file and any NuGet config
+COPY --link *.sln ./
+COPY --link NuGet.config ./
 
-# Copy project file and restore as distinct layers
-COPY --link *.csproj .
-RUN dotnet restore -a $TARGETARCH
+# Copy all .csproj files to the root of the workdir
+COPY ./*/*.csproj ./
+
+# Recreate the directory structure for each csproj file and move them into place
+RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv $file ${file%.*}/; done
+
+# Restore as distinct layers
+RUN dotnet restore -a $TARGETARCH *.sln
 
 # Copy source code and publish app
 COPY --link . .
-RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app Niobium.Ads.MCP/Niobium.Ads.MCP.csproj
-
+RUN dotnet publish -a $TARGETARCH -c $BUILD_CONFIGURATION --no-restore -o /app Niobium.Ads.MCP/*.csproj
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
