@@ -32,7 +32,7 @@ namespace Niobium.Ads.MCP
             }
 
 
-            if (!apikey.Equals(extractedApiKey))
+            if (!apikey.Equals(requestAPIKey))
             {
                 context.Response.StatusCode = 401; // Unauthorized
                 await context.Response.WriteAsync("Unauthorized client.");

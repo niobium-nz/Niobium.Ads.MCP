@@ -9,7 +9,7 @@ namespace Niobium.Ads.Analyst
     {
         public async Task DeployAsync(CancellationToken cancellationToken)
         {
-            //await keywordPlanner.DeployAsync(cancellationToken);
+            await keywordPlanner.DeployAsync(cancellationToken);
             await adsDiscoverer.DeployAsync(cancellationToken);
         }
 
