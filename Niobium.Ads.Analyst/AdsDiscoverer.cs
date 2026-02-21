@@ -10,10 +10,10 @@ namespace Niobium.Ads.Analyst
 
         protected override IEnumerable<ResponseTool> Tools =>
         [
+            McpTools.AdsLibraryMcpTool,
             ResponseTool.CreateWebSearchPreviewTool(
                 WebSearchToolLocation.CreateApproximateLocation(country: "US")
             ),
-            ResponseTool.CreateMcpTool("adslibrary", new Uri("https://niobiumadsmcpapp.mangosky-a7b92dc1.westus2.azurecontainerapps.io/"), authorizationToken: "CeYXCoG4U82EEITMpkDiTh1EOmi", toolCallApprovalPolicy: new McpToolCallApprovalPolicy(GlobalMcpToolCallApprovalPolicy.NeverRequireApproval))
         ];
     }
 }

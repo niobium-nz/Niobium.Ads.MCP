@@ -15,6 +15,8 @@ namespace Niobium.Ads.Analyst
 
         public async Task RunAsync(string conversationID, CancellationToken cancellationToken)
         {
+            await DeployAsync(cancellationToken);
+
             KeywordsPlannerInput input = new()
             {
                  CategoryFocus = "Dog Toy",
