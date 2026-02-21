@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
 namespace Niobium.Ads.MCP
@@ -6,7 +5,6 @@ namespace Niobium.Ads.MCP
     internal class ScrapecreatorsMetaAdsLibrary(HttpClient httpClient) : IMetaAdsLibrary
     {
         private const string ApiEndpoint = "https://api.scrapecreators.com/v1/facebook/adLibrary/search/ads";
-        private static JsonSerializerOptions serializeOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
 
         public async Task<MetaAdsSearchResponse> SearchAdsAsync(string keyword, Country country, DateOnly? activeSince = null)
         {
@@ -78,7 +76,7 @@ namespace Niobium.Ads.MCP
             MetaAdsSearchResponse? result = null;
             if (!string.IsNullOrWhiteSpace(responseContent))
             {
-                result = JsonSerializer.Deserialize<MetaAdsSearchResponse>(responseContent, serializeOptions);
+                result = JsonSerializer.Deserialize<MetaAdsSearchResponse>(responseContent, SerializationOptions.SnakeCase);
             }
 
             return result ??= new MetaAdsSearchResponse

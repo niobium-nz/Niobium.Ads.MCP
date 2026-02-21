@@ -1,4 +1,4 @@
-namespace Niobium.Ads.MCP
+namespace Niobium.Ads
 {
     public struct Country : IEquatable<Country>
     {
@@ -404,7 +404,7 @@ namespace Niobium.Ads.MCP
             {
                 return false;
             }
-            nameOrCode = nameOrCode.Trim();
+            nameOrCode = nameOrCode.Trim().ToUpperInvariant();
 
             if (alpha2.ContainsKey(nameOrCode))
             {

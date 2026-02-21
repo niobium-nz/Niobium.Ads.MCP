@@ -6,13 +6,6 @@ namespace Niobium.Ads.MCP
 
         public async Task InvokeAsync(HttpContext context, IConfiguration configuration)
         {
-            if (!context.Request.Headers.TryGetValue(API_KEY_HEADER_NAME, out var extractedApiKey))
-            {
-                context.Response.StatusCode = 401; // Unauthorized
-                await context.Response.WriteAsync("API Key was not provided.");
-                return;
-            }
-
             var apikey = Environment.GetEnvironmentVariable("X_API_KEY");
             if (apikey == null)
             {
@@ -20,6 +13,24 @@ namespace Niobium.Ads.MCP
                 await context.Response.WriteAsync("API Key is not configured.");
                 return;
             }
+
+            string? requestAPIKey = null;
+            if (context.Request.Headers.TryGetValue(API_KEY_HEADER_NAME, out var extractedApiKey))
+            {
+                requestAPIKey = extractedApiKey;
+            }
+            else if (!string.IsNullOrEmpty(context.Request.Headers.Authorization))
+            {
+                requestAPIKey = context.Request.Headers.Authorization;
+            }
+
+            if (string.IsNullOrEmpty(requestAPIKey))
+            {
+                context.Response.StatusCode = 401; // Unauthorized
+                await context.Response.WriteAsync("API Key was not provided.");
+                return;
+            }
+
 
             if (!apikey.Equals(extractedApiKey))
             {

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Niobium.Ads.MCP
+namespace Niobium.Ads
 {
     public class MetaAdsSearchResponse
     {
