@@ -7,7 +7,7 @@ using OpenAI.Responses;
 
 namespace Niobium.Ads.Analyst
 {
-    internal abstract class HostedAgent<TInput, TOutput>(AIProjectClient client, ILogger logger) : HostedAgent(client, logger) 
+    internal abstract class HostedAIAgent<TInput, TOutput>(AIProjectClient client, ILogger logger) : HostedAIAgent(client, logger) , IAgent<TInput, TOutput>
         where TOutput : class
     {
         //protected override async Task<PromptAgentDefinition> BuildAgentDefinitionAsync(CancellationToken cancellationToken)
@@ -23,7 +23,7 @@ namespace Niobium.Ads.Analyst
         //    return agentDefinition;
         //}
 
-        public async Task<TOutput?> RunAsync(string conversationID, TInput input, CancellationToken cancellationToken)
+        public virtual async Task<TOutput?> RunAsync(string conversationID, TInput input, CancellationToken cancellationToken)
         {
             var request = input is string str ? str : JsonSerializer.Serialize(input, SerializationOptions.SnakeCase);
             var responseJSON = await base.RunAsync(conversationID, request, cancellationToken);
@@ -32,15 +32,15 @@ namespace Niobium.Ads.Analyst
         }
     }
 
-    internal abstract class HostedAgent(AIProjectClient client, ILogger logger)
+    internal abstract class HostedAIAgent(AIProjectClient client, ILogger logger) : IAgent
     {
         private ProjectResponsesClient? _agent;
-
-        protected abstract string Name { get; }
 
         protected virtual string Model => Models.GPT_5_2;
 
         protected virtual IEnumerable<ResponseTool> Tools { get; } = [];
+
+        public abstract string Name { get; }
 
         protected async virtual Task<string> GetInstructionsAsync(CancellationToken cancellationToken)
         {
@@ -65,7 +65,7 @@ namespace Niobium.Ads.Analyst
             return agentDefinition;
         }
 
-        protected async Task<AgentVersion> DeployAgentAsync(CancellationToken cancellationToken)
+        protected virtual async Task<AgentVersion> DeployAgentAsync(CancellationToken cancellationToken)
         {
             PromptAgentDefinition agentDefinition = await BuildAgentDefinitionAsync(cancellationToken);
             AgentVersion version = await client.Agents.CreateAgentVersionAsync(agentName: Name, options: new(agentDefinition), cancellationToken: cancellationToken);
@@ -73,7 +73,7 @@ namespace Niobium.Ads.Analyst
             return version;
         }
 
-        protected async Task<ProjectResponsesClient> GetOrCreateAgentAsync(string conversationID, CancellationToken cancellationToken)
+        protected virtual async Task<ProjectResponsesClient> GetOrCreateAgentAsync(string conversationID, CancellationToken cancellationToken)
         {
             if (_agent == null)
             {
@@ -98,7 +98,7 @@ namespace Niobium.Ads.Analyst
 
         public async Task DeployAsync(CancellationToken cancellationToken) => await DeployAgentAsync(cancellationToken);
 
-        public async Task<string?> RunAsync(string conversationID, string input, CancellationToken cancellationToken)
+        public virtual async Task<string?> RunAsync(string conversationID, string input, CancellationToken cancellationToken)
         {
             var agent = await GetOrCreateAgentAsync(conversationID, cancellationToken);
             ResponseResult response = await agent.CreateResponseAsync(userInputText: input, cancellationToken: cancellationToken);

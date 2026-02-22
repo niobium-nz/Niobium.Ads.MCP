@@ -31,7 +31,6 @@ namespace Niobium.Ads.MCP
                 return;
             }
 
-
             if (!apikey.Equals(requestAPIKey))
             {
                 context.Response.StatusCode = 401; // Unauthorized

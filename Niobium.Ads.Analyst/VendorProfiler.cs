@@ -4,9 +4,9 @@ using OpenAI.Responses;
 
 namespace Niobium.Ads.Analyst
 {
-    internal class VendorProfiler(AIProjectClient client, ILogger<VendorProfiler> logger) : HostedAgent(client, logger)
+    internal class VendorProfiler(AIProjectClient client, ILogger<VendorProfiler> logger) : HostedAIAgent(client, logger)
     {
-        protected override string Name => nameof(VendorProfiler);
+        public override string Name => nameof(VendorProfiler);
 
         protected override IEnumerable<ResponseTool> Tools =>
         [

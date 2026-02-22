@@ -9,7 +9,7 @@ namespace Niobium.Ads.MCP
     public class AdsLibraryTool(IMetaAdsLibrary adsLibrary)
     {
         [McpServerTool, Description("Search against ads Library for ads by keyword, country and active date.")]
-        [HttpGet(nameof(SearchAds))]
+        [HttpGet(Endpoints.SearchAds)]
         public async Task<MetaAdsSearchResponse> SearchAds(
             [Description("The keyword to search for.")] string keyword,
             [Description("The country to search for. Must specify one and can only specify one country. Provide country code in ISO 3166-1 alpha-2 format, such as 'US'")] string country,

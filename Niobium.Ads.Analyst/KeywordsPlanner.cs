@@ -4,9 +4,9 @@ using OpenAI.Responses;
 
 namespace Niobium.Ads.Analyst
 {
-    internal class KeywordsPlanner(AIProjectClient client, ILogger<KeywordsPlanner> logger) : HostedAgent<KeywordsPlannerInput, KeywordsPlannerOutput>(client, logger)
+    internal class KeywordsPlanner(AIProjectClient client, ILogger<KeywordsPlanner> logger) : HostedAIAgent<KeywordsPlannerInput, KeywordsPlannerOutput>(client, logger)
     {
-        protected override string Name => nameof(KeywordsPlanner);
+        public override string Name => nameof(KeywordsPlanner);
 
         protected override IEnumerable<ResponseTool> Tools =>
         [
@@ -14,5 +14,16 @@ namespace Niobium.Ads.Analyst
                 WebSearchToolLocation.CreateApproximateLocation(country: "US")
             ),
         ];
+
+        public override Task<KeywordsPlannerOutput?> RunAsync(string conversationID, KeywordsPlannerInput input, CancellationToken cancellationToken) 
+            => Task.FromResult<KeywordsPlannerOutput?>(new KeywordsPlannerOutput
+            {
+                CategoryFocus = input.CategoryFocus,
+                OptimizedKeywords = [
+                    $"{input.CategoryFocus} for {input.Country}",
+                    $"Best {input.CategoryFocus} in {input.Country}",
+                    $"{input.CategoryFocus} online {input.Country}",
+                ]
+            });
     }
 }

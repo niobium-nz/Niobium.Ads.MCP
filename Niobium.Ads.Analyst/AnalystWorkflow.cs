@@ -5,12 +5,13 @@ namespace Niobium.Ads.Analyst
     internal class AnalystWorkflow(
         KeywordsPlanner keywordPlanner,
         AdsDiscoverer adsDiscoverer,
+        ProductInfoEnricher productInfoEnricher,
         ILogger<AnalystWorkflow> logger)
     {
         public async Task DeployAsync(CancellationToken cancellationToken)
         {
             await keywordPlanner.DeployAsync(cancellationToken);
-            await adsDiscoverer.DeployAsync(cancellationToken);
+            await productInfoEnricher.DeployAsync(cancellationToken);
         }
 
         public async Task RunAsync(string conversationID, CancellationToken cancellationToken)
@@ -37,7 +38,14 @@ namespace Niobium.Ads.Analyst
                     Country = input.Country,
                 };
                 var rawAds = await adsDiscoverer.RunAsync(conversationID, discovererInput, cancellationToken);
-                Console.WriteLine(rawAds);
+                if (rawAds == null || rawAds.SearchResults.Count <= 0)
+                {
+                    logger.LogWarning("Failed to get ads for keyword {keyword}", keyword);
+                    continue;
+                }
+
+                var candidates = await productInfoEnricher.RunAsync(conversationID, new ProductInfoEnricherInput { RawAds = rawAds.SearchResults }, cancellationToken);
+                Console.WriteLine($"Keyword: {keyword}, Candidates Count: {candidates?.Candidates?.Count}");
                 break;
             }
         }
